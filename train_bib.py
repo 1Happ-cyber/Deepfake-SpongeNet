@@ -230,7 +230,6 @@ if __name__ == "__main__":
             check_val_every_n_epoch=1,
             callbacks=[
                 L.pytorch.callbacks.ModelCheckpoint(
-                    monitor="val_acc",
                     save_top_k=2,
                     mode="max",
                     dirpath="/checkpoints",
