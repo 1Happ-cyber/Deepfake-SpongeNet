@@ -234,7 +234,7 @@ if __name__ == "__main__":
                     mode="max",
                     dirpath="/checkpoints",
                     filename= NAME + data + "_" + cfg["model"][
-                        "backbone"] + "_{epoch}-{train_auc:.10f}-{val_acc:.10f}",
+                        "backbone"] + "_{epoch}",
                 ),
                 specific_epochs_callback,
                 TqdmTrainCallback(),
