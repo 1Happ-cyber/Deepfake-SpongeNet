@@ -11,7 +11,6 @@ import glob
 from torch.utils.data import DataLoader
 from lightning.pytorch.loggers import WandbLogger
 from cifake_dataset import CIFAKEDataset
-
 from coco_fake_dataset import COCOFakeDataset
 from dffd_dataset import DFFDDataset
 import main_model as model
