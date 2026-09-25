@@ -143,25 +143,6 @@ if __name__ == "__main__":
                 split="test",
                 resolution=cfg["train"]["resolution"],
             )
-            # val_dataset = COCOFakeDataset(
-            #     coco2014_path=cfg["dataset"]["coco2014_path"],
-            #     coco_fake_path=cfg["dataset"]["coco_fake_path"],
-            #     split="val",
-            #     mode="single",
-            #     resolution=cfg["train"]["resolution"],
-            # )
-            # val_dataset = COCOFakeDataset(
-            #     coco2014_path=cfg["dataset"]["coco2014_path"],
-            #     coco_fake_path=cfg["dataset"]["coco_fake_path"],
-            #     split="val",
-            #     mode="single",
-            #     resolution=cfg["train"]["resolution"],
-            # )
-            # val_dataset = CIFAKEDataset(
-            #     dataset_path=cfg["dataset"]["cifake_path"],
-            #     split="test",
-            #     resolution=cfg["train"]["resolution"],
-            # )
         # loads the dataloaders
         num_workers = 4
         train_loader = DataLoader(
