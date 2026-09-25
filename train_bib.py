@@ -102,47 +102,25 @@ if __name__ == "__main__":
         torch.set_float32_matmul_precision("medium")
         print(cfg["dataset"]["name"])
         data = cfg["dataset"]["name"]
-        # get data
+        # get data-->根据in-domain或者cross-domain自行设置，例如：
+        # if data == "dffd":
+        #     print(f"Loading DFFD dataset from {cfg['dataset']['dffd_path']}")
+        #     train_dataset = DFFDDataset(
+        #         dataset_path=cfg["dataset"]["dffd_path"],
+        #         split="train",
+        #         resolution=cfg["train"]["resolution"],
+        #     )
+        #     val_dataset = DFFDDataset(
+        #         dataset_path=cfg["dataset"]["dffd_path"],
+        #         split="val",
+        #         resolution=cfg["train"]["resolution"],
+        #     )
         if data == "coco_fake":
-            print(
-                f"Loading COCO-Fake datasets from {cfg['dataset']['coco2014_path']} and {cfg['dataset']['coco_fake_path']}"
-            )
-            train_dataset = CIFAKEDataset(
-                dataset_path=cfg["dataset"]["cifake_path"],
-                split="train",
-                resolution=cfg["train"]["resolution"],
-            )
-            val_dataset = COCOFakeDataset(
-                coco2014_path=cfg["dataset"]["coco2014_path"],
-                coco_fake_path=cfg["dataset"]["coco_fake_path"],
-                split="val",
-                mode="single",
-                resolution=cfg["train"]["resolution"],
-            )
+            pass
         elif data == "dffd":
-            print(f"Loading DFFD dataset from {cfg['dataset']['dffd_path']}")
-            train_dataset = DFFDDataset(
-                dataset_path=cfg["dataset"]["dffd_path"],
-                split="train",
-                resolution=cfg["train"]["resolution"],
-            )
-            val_dataset = DFFDDataset(
-                dataset_path=cfg["dataset"]["dffd_path"],
-                split="test",
-                resolution=cfg["train"]["resolution"],
-            )
+            pass
         elif data == "cifake":
-            print(f"Loading CIFAKE dataset from {cfg['dataset']['cifake_path']}")
-            train_dataset = CIFAKEDataset(
-                dataset_path=cfg["dataset"]["cifake_path"],
-                split="train",
-                resolution=cfg["train"]["resolution"],
-            )
-            val_dataset = DFFDDataset(
-                dataset_path=cfg["dataset"]["dffd_path"],
-                split="test",
-                resolution=cfg["train"]["resolution"],
-            )
+            pass
         # loads the dataloaders
         num_workers = 4
         train_loader = DataLoader(
@@ -163,9 +141,6 @@ if __name__ == "__main__":
         # init model
         positive_samples = sum([item["is_real"] for item in train_dataset.items])
         negative_samples = len(train_dataset) - positive_samples
-        #ckpt_dir = fr"/root/OurCode/lpb_only_seed_{seed}"
-        #ckpt_files = glob.glob(os.path.join(ckpt_dir, "*.ckpt"))
-        #net = model.BNext4DFR.load_from_checkpoint(ckpt_files[0])
         net = model.BNext4DFR(
             num_classes=cfg["dataset"]["labels"],
             backbone=cfg["model"]["backbone"],
@@ -191,7 +166,7 @@ if __name__ == "__main__":
         )
         # start training
         date = datetime.now().strftime("%Y%m%d_%H%M")
-        project = "DFAD_CVPRW24"
+        project = "PR26"
         run_label = args.cfg.split("/")[-1].split(".")[0]
         run = NAME + data + f"{seed}"
         logger = CSVLogger("logs", name=run)
@@ -206,7 +181,6 @@ if __name__ == "__main__":
             limit_train_batches=cfg["train"]["limit_train_batches"],
             limit_val_batches=cfg["train"]["limit_val_batches"],
             max_epochs=cfg["train"]["epoch_num"],
-            # num_sanity_val_steps=-1,
             val_check_interval=1.0,
             check_val_every_n_epoch=1,
             callbacks=[
@@ -219,7 +193,6 @@ if __name__ == "__main__":
                 ),
                 specific_epochs_callback,
                 TqdmTrainCallback(),
-
             ],
             # callbacks=[specific_epochs_callback],
             logger=logger,
